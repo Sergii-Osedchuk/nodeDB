@@ -1,7 +1,15 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const app = express();
+
+const dotenv = require("dotenv");
+
+dotenv.config();
+
 const Product = require('./models/productModel');
+
+const PORT = process.env.PORT || 3001;
+const CONNECTION = process.env.CONNECTION;
 
 app.use(express.json());
 
@@ -69,13 +77,11 @@ app.delete("/products/:id", async (req, res) => {
 })
 
 mongoose
-  .connect(
-    "mongodb+srv://norgestream:03121979Sestra@sergioapi.rarueb1.mongodb.net/MyList?retryWrites=true&w=majority&appName=SergioAPI"
-  )
+  .connect(CONNECTION)
   .then(() => {
     console.log("Connected to Mongo DB");
-    app.listen(3001, () => {
-      console.log("Node API is runing");
+    app.listen( PORT, () => {
+      console.log(`Node API is runing on port ${PORT}`);
     });
   })
   .catch((err) => console.log(err));
