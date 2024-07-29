@@ -40,6 +40,34 @@ app.post("/products", async(req, res) => {
   }
 });
 
+app.put("/products/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const product = await Product.findByIdAndUpdate(id, req.body);
+    if (!product) {
+      res.status(404).json({ message: `Cant find product by this id ${id}`})
+    }
+    const updatedProduct = await Product.findById(id);
+    res.status(200).json(updatedProduct);
+    
+  } catch (error) {
+    res.status(500).json({ massage: error.message })
+  }
+})
+
+app.delete("/products/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const product = await Product.findByIdAndDelete(id);
+    if (!product) {
+      res.status(404).json({ message: "Cant find this product" });
+    }
+    res.status(200).json(product);
+  } catch (error) {
+    res.status(500).json({message: error.message})
+  }
+})
+
 mongoose
   .connect(
     "mongodb+srv://norgestream:03121979Sestra@sergioapi.rarueb1.mongodb.net/MyList?retryWrites=true&w=majority&appName=SergioAPI"
